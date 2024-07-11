@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Timestamp Microservice</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <h1>Timestamp Microservice</h1>
@@ -12,5 +13,28 @@
         <li><a href="/api/1450137600000">/api/1450137600000</a></li>
         <li><a href="/api">/api</a> (current date)</li>
     </ul>
+    <div id="result"></div>
+
+    <script>
+        $(document).ready(function() {
+            $('a').on('click', function(event) {
+                event.preventDefault();
+                var url = $(this).attr('href');
+
+                $.getJSON(url, function(data) {
+                    // 确保响应数据对象的存在
+                    if (data && data.error) {
+                        $('#result').text('Error: ' + data.error);
+                    } else if (data) {
+                        $('#result').html('Unix: ' + data.unix + '<br>UTC: ' + data.utc);
+                    } else {
+                        $('#result').text('Unexpected error.');
+                    }
+                }).fail(function() {
+                    $('#result').text('An error occurred while processing your request.');
+                });
+            });
+        });
+    </script>
 </body>
 </html>
